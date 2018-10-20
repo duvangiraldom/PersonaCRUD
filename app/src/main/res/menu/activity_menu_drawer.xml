@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/registrar"
+            android:icon="@drawable/ic_agregar"
+            android:title="Registrarse" />
+        <item
+            android:id="@+id/consultar"
+            android:icon="@drawable/ic_buscar"
+            android:title="Consultar" />
+        <item
+            android:id="@+id/actualizar"
+            android:icon="@drawable/ic_actualizar"
+            android:title="Actualizar" />
+        <item
+            android:id="@+id/listar"
+            android:icon="@drawable/ic_listar"
+            android:title="lista" />
+        <item
+            android:id="@+id/eliminar"
+            android:icon="@drawable/ic_eliminar"
+            android:title=" Eliminar" />
+
+    </group>
+
+</menu>
