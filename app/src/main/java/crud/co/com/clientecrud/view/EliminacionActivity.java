@@ -88,6 +88,7 @@ public class EliminacionActivity extends AppCompatActivity {
         int id = "".equals(txtId.getText().toString()) ? 0 : Integer.parseInt(txtId.getText().toString());
         eliminacionCliente.start(this, id);
         vaciarCampos();
+
     }
 
     private void vaciarCampos() {

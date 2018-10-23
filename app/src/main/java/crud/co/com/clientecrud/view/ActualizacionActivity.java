@@ -11,6 +11,8 @@ import android.widget.Toast;
 import crud.co.com.clientecrud.R;
 import crud.co.com.clientecrud.cliente.ActualizacionCliente;
 import crud.co.com.clientecrud.cliente.ConsultaCliente;
+import crud.co.com.clientecrud.dto.PersonaDTO;
+import crud.co.com.clientecrud.util.Converter;
 import crud.co.com.clientecrud.util.ViewUtil;
 
 public class ActualizacionActivity extends AppCompatActivity {
@@ -24,6 +26,7 @@ public class ActualizacionActivity extends AppCompatActivity {
     private ViewUtil viewUtil;
     private ConsultaCliente consultaCliente;
     private ActualizacionCliente actualizacionCliente;
+    private PersonaDTO personaDTO;
 
 
     @Override
@@ -63,21 +66,19 @@ public class ActualizacionActivity extends AppCompatActivity {
     }
 
     public void consultarOnClick(View view) {
-        int id = "".equals(txtId.getText().toString()) ? 0 : Integer.parseInt(txtId.getText().toString());
+        int id = "".equals(txtIdABuscar.getText().toString()) ? 0 : Integer.parseInt(txtIdABuscar.getText().toString());
         if(validateId(id)){
             consultaCliente.start(this, id, txtNombre, txtApellido, txtTelefono);
+            txtId.setText(txtIdABuscar.getText().toString());
             showComponents(View.VISIBLE);
-        }
-        else{
-            Toast.makeText(this, R.string.datos_no_encontrados, Toast.LENGTH_SHORT).show();
         }
     }
 
 
     public void actualizarOnClick(View view) {
         if(validate()){
-            actualizacionCliente.start();
-            Toast.makeText(this, R.string.persona_actualizada, Toast.LENGTH_SHORT).show();
+            personaDTO = new PersonaDTO(Converter.StringToInteger(txtId.getText().toString()), txtNombre.getText().toString(), txtApellido.getText().toString(), txtTelefono.getText().toString());
+            actualizacionCliente.start(this, personaDTO);
         }
         else{
             Toast.makeText(this, R.string.persona_no_actualizada, Toast.LENGTH_SHORT).show();
@@ -106,6 +107,7 @@ public class ActualizacionActivity extends AppCompatActivity {
     private boolean validate(){
         txtNombre.setError(null);
         txtApellido.setError(null);
+        txtTelefono.setError(null);
         boolean esValido = true;
         if("".equals(txtNombre.getText().toString())){
             esValido = false;

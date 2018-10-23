@@ -3,10 +3,11 @@ package crud.co.com.clientecrud.cliente;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -17,13 +18,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import crud.co.com.clientecrud.R;
 import crud.co.com.clientecrud.constantes.Constantes;
-import crud.co.com.clientecrud.dto.PersonaDTO;
+import crud.co.com.clientecrud.util.CustomAdapter;
+import crud.co.com.clientecrud.util.ItemLista;
 import cz.msebera.android.httpclient.Header;
 
 public class ListaCliente {
 
-    public void start(final Activity activityLista, final List<PersonaDTO> listaPersonas) {
+    public void start(final Activity activityLista, final ListView listViewListaPersonas) {
+
+        final List<ItemLista> listaPersonas = new ArrayList<>();
 
         final AsyncHttpClient client = new AsyncHttpClient();
         String uri = Constantes.URL_LISTAR;
@@ -32,24 +37,26 @@ public class ListaCliente {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                     try {
-
-                        System.out.println(response);
-
-
-                        for (int item = 0; item< response.length(); item++) {
-
+                        for (int item = 0; item < response.length(); item++) {
                             JSONObject objetoJson = response.getJSONObject(item);
-
-                            System.out.println(objetoJson);
 
                             Integer id = objetoJson.getInt("id");
                             String nombre = objetoJson.getString("nombre");
                             String apellidos = objetoJson.getString("apellidos");
                             String telefono = objetoJson.getString("telefono");
 
-                            PersonaDTO personaDTO = new PersonaDTO(id, nombre, apellidos, telefono);
-                            listaPersonas.add(personaDTO);
+                            //System.out.println("id: "+id.toString()+ " nombre: "+nombre+ " apellidos: "+apellidos + " telefono: "+telefono);
+                            listaPersonas.add(new ItemLista(R.drawable.ic_usuario, id.toString(), nombre, apellidos));
                         }
+                        CustomAdapter customAdapter = new CustomAdapter(activityLista, listaPersonas);
+                        listViewListaPersonas.setAdapter(customAdapter);
+                        listViewListaPersonas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                ItemLista itemLista = (ItemLista) listViewListaPersonas.getItemAtPosition(position);
+                                Toast.makeText(activityLista.getApplicationContext(), itemLista.getNombre(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
                     } catch (JSONException e) {
                         e.printStackTrace();
